@@ -1,65 +1,145 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+  import { useEffect, useState } from "react"
+  import { type Recipe, type ApiResponse } from "./types/recipe"
+  import { mapMeals } from "./utils/mapAttribute"
+  import Card from "./components/card"
+  import './globals.css'
+  import CardInfo from "./components/cardInfo"
+  import { type Category, type ApiResCategory } from "./types/categories" 
+  import mapCategories from "./utils/mapCategories"
+
+  const API_URL = 'https://www.themealdb.com/api/json/v1/1/'
+
+
+  function App() {
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<Error | null>(null)
+    const [recipe, setRecipe] = useState<Recipe[]>([])
+    const [query, setQuery] = useState('')
+    const [favoritesId, setFavoritesId] = useState<string[]>([])
+    const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
+    const [category, setCategory] = useState<Category[] | null>([])
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`${API_URL}list.php?c=list`)
+
+          if(!response.ok) {
+            throw new Error('No se encontro la lista')
+          }
+          const data: ApiResCategory = await response.json()
+          const mappedCategories = mapCategories(data)
+          setCategory(mappedCategories)
+
+        } catch(error) {
+          setError(error as Error)
+        }
+      }
+      fetchData()
+    }, [category])
+
+    useEffect(() => {
+      if (!query.trim()) {
+        setRecipe(recipe)
+        setLoading(false)
+        setError(null)
+        
+        return
+      }
+      const fetchData = async () => {
+        try {
+          setLoading(true)
+          setError(null)
+
+          const response = await fetch(`${API_URL}search.php?s=${query}`)
+
+          if (!response.ok) {
+            throw new Error('No se encontraron Recetas')
+          }
+          const data: ApiResponse = await response.json()
+          const mappedRecipe = mapMeals(data)
+          setRecipe(mappedRecipe)
+
+        } catch (error) {
+          setError(error as Error)
+        } finally {
+          setLoading(false)
+        }
+      }
+      fetchData()
+    }, [query])
+
+    useEffect(() => {
+      const stored = localStorage.getItem('favoritesRecipes')
+      if (stored) {
+        setFavoritesId(JSON.parse(stored))
+      }
+    }, [])
+
+    const addFavoritesRecipes = (id: string) => {
+      setFavoritesId(prevValue => {
+        const exist = prevValue.some(favoriteRecipe => favoriteRecipe === id)
+        const result = exist ? prevValue.filter(favoriteRecipe => favoriteRecipe !== id) : [...prevValue, id]
+
+        return result
+      })
+    }
+    useEffect(() => {
+      localStorage.setItem('favoritesRecipes', JSON.stringify(favoritesId))
+    }, [favoritesId])
+
+    return (
+      <div>
+        <header className="sticky top-0 bg-amber-100 pb-5 z-99" >
+          <div className="text-center">
+            <h1 className="p-10 font-bold text-3xl">MEALS</h1>
+          </div>
+
+          <div className="text-center">
+            <input
+              type="text"
+              placeholder="Enter a recipe"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
-}
+          </div>
+
+          <div>
+            <select>
+              <option></option>
+            </select>
+          </div>
+
+        </header>
+
+        {loading && <p>LOADING...</p>}
+        {error && <p>{error.message}</p>}
+
+        {!selectedRecipe && (
+          <div className="grid grid-cols-2 md:grid-cols-4 p-10 gap-10 ">
+            {recipe.map((item) => (
+              <Card
+                key={item.id}
+                recipe={item}
+                clickRecipe={() => setSelectedRecipe(item)}
+                addToFavorites={() => addFavoritesRecipes(item.id)}
+                isFavorite={favoritesId.includes(item.id)}
+              />
+            ))}
+          </div>
+        )}
+        {selectedRecipe && (
+          <div>
+            <CardInfo
+              key={selectedRecipe.id}
+              recipe={selectedRecipe}
+            />
+          </div>
+        )}
+
+      </div>
+    )
+  }
+  export default App
