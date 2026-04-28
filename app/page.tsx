@@ -108,7 +108,11 @@
 
           <div>
             <select>
-              <option></option>
+              {category?.map((cat) => (
+               <option key={cat.name} value={cat.name}>
+                {cat.name}
+               </option> 
+              ))}
             </select>
           </div>
 
