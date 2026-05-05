@@ -1,14 +1,13 @@
 import type { Recipe } from "../types/recipe"
 
+
 type CardInfoProps = {
-    recipe: Recipe
+    recipes: Recipe
 }
 
 
-
-
-function CardInfo({ recipe }: CardInfoProps) {
-    const { name, category, instructions, image, ingredients, measures } = recipe
+function CardInfo({ recipes }: CardInfoProps) {
+    const { name, category, instructions, image, ingredients, measures } = recipes
 
     return (
         <div className="bg-white max-w-xl w-full rounded-2xl shadow-lg p-6">
