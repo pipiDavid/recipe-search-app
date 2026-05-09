@@ -33,16 +33,17 @@ function CardInfo({ recipes }: CardInfoProps) {
 
                 <div className="flex: col-end-1">
                     <ul>
-                        {ingredients.map((ingredient) => (
-                            <li>{ingredient}</li>
+                        {ingredients.map((ingredient, i) => (
+                            <li key={`${i}-${ingredient}`}
+                            >{ingredient}</li>
                         ))}
                     </ul>
                 </div>
 
                 <div className="">
                     <ul>
-                        {measures.map((measure) => (
-                            <li>{measure}</li>
+                        {measures.map((measure, i) => (
+                            <li key={`${i}-${measure}`}>{measure}</li>
                         ))}
                     </ul>
                 </div>

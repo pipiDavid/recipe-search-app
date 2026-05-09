@@ -5,8 +5,10 @@ import CardInfo from "../../components/cardInfo"
 
 function RecipeId() {
     const router = useRouter()
-    const {selectedRecipe} = useRecipeContext()
-
+    const pageContext = useRecipeContext()
+    console.log('pageContext:' + pageContext) // 
+    return (<></>)
+ 
     if(!selectedRecipe) {
         return <p>Error</p>
     }

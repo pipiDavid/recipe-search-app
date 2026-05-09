@@ -1,5 +1,4 @@
 import './globals.css'
-import { RecipeProvider } from './context/RecipeContext'
 import React from 'react'
 
 export default function RootLayout({
@@ -10,10 +9,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-
-        <RecipeProvider>
-          {children}
-          </RecipeProvider>
+        {children}
       </body>
     </html>
   )

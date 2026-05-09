@@ -1,0 +1,41 @@
+'use client'
+
+import { useEffect, useState } from "react"
+import { useRecipeContext } from "../context/RecipeContext"
+import { ApiResponse } from "../types/recipe"
+import { mapMeals } from "../utils/mapAttribute"
+
+export function UseFetchRecipes() {
+  const { recipes, setRecipes, query, setLoading, setError } = useRecipeContext()
+  const API_URL = 'https://www.themealdb.com/api/json/v1/1/'
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setLoading(false)
+      setError(null)
+
+      return
+    }
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const response = await fetch(`${API_URL}search.php?s=${query}`)
+
+        if (!response.ok) {
+          throw new Error('No se encontraron Recetas') //CAMBIAR EL ERROR Y SER MAS EXPLICITO
+        }
+        const data: ApiResponse = await response.json()
+        const mappedRecipe = mapMeals(data)
+        setRecipes(mappedRecipe)
+
+      } catch (error) {
+        setError(error as Error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [query])
+}

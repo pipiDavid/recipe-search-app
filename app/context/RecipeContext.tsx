@@ -1,46 +1,60 @@
 'use client'
-import React, { useContext, createContext, useState, ReactNode } from "react"
+import { useContext, createContext, useState, ReactNode } from "react"
 import { Recipe } from "../types/recipe"
 import { Category } from "../types/categories"
 
 type RecipeContextTypes = {   // esto va a ser los valores que va tener RecipeContext se crean primero tipo props
+    query: string
+    setQuery: (inputQuery: string) => void
+
+    error: Error | null
+    setError: (inputError: Error | null) => void
+
+    loading: boolean
+    setLoading: (inputLoading: boolean) => void
+
     recipes: Recipe[]
-    setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>
+    setRecipes: (inputRecipes: Recipe[]) => void
 
     selectedRecipe: Recipe | null
-    setSelectedRecipe: React.Dispatch<React.SetStateAction<Recipe | null>>
+    setSelectedRecipe: (inputSelectedRecipe: Recipe | null) => void
 
     favoritesId: string[]
-    setFavoritesId: React.Dispatch<React.SetStateAction<string[]>>
+    setFavoritesId: (inputFavoritesId: string[]) => void
 
     categories: Category[]
-    setCategories: React.Dispatch<React.SetStateAction<Category[]>>
+    setCategories: (inputCategories: Category[]) => void
 }
 
 const RecipeContext = createContext<RecipeContextTypes | null>(null)
 
-type RecipeProviderProps = {
-    children: ReactNode
-}
-
-export function RecipeProvider({children}: RecipeProviderProps) {
+export function RecipeProvider({ children }: { children: ReactNode }) {
     const [recipes, setRecipes] = useState<Recipe[]>([])
+    const [error, setError] = useState<Error | null>(null)
+    const [query, setQuery] = useState('')
+    const [loading, setLoading] = useState<boolean>(false)
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
     const [favoritesId, setFavoritesId] = useState<string[]>([])
     const [categories, setCategories] = useState<Category[]>([])
 
     return (
-        <RecipeContext.Provider 
-        value={{
-            recipes,
-            setRecipes,
-            selectedRecipe,
-            setSelectedRecipe,
-            favoritesId,
-            setFavoritesId,
-            categories,
-            setCategories
-        }}
+        <RecipeContext.Provider
+            value={{
+                recipes,
+                setRecipes,
+                error,
+                setError,
+                query,
+                setQuery,
+                loading, 
+                setLoading,
+                selectedRecipe,
+                setSelectedRecipe,
+                favoritesId,
+                setFavoritesId,
+                categories,
+                setCategories
+            }}
         >
             {children}
         </RecipeContext.Provider>
@@ -49,9 +63,6 @@ export function RecipeProvider({children}: RecipeProviderProps) {
 
 export function useRecipeContext() {
     const context = useContext(RecipeContext)
-
-    if(!context) {
-        throw new Error('Error')
-    }
+    console.log('context: ' + JSON.stringify(context))
     return context
 }
