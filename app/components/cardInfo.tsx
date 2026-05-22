@@ -1,56 +1,59 @@
 import type { Recipe } from "../types/recipe"
 
+
 type CardInfoProps = {
-    recipe: Recipe
+  recipes: Recipe
 }
 
 
+function CardInfo({ recipes }: CardInfoProps) {
+  const { name, category, instructions, image, ingredients, measures } = recipes
 
+  return (
+    <div className="box-shadow p-50 bg-yellow-200">
+      <div className="bg-black p-10 rounded-xl">
 
-function CardInfo({ recipe }: CardInfoProps) {
-    const { name, category, instructions, image, ingredients, measures } = recipe
+        <div className="flex justify-center">
+          <h1 className="font-bold pb-10 text-blue-50">{name}</h1>
+        </div>
 
-    return (
-        <div className="bg-white max-w-xl w-full rounded-2xl shadow-lg p-6">
-            <div className="bg-white max-w-xl w-full rounded-2xl shadow-lg p-6">
+        <div className="flex justify-center pb-10">
 
-                <div className="">
-                    <h1 className="">{name}</h1>
-                </div>
+          <img className="w-50 rounded-xl text-blue-50" src={image} alt={name} />
 
-                <div className="">
+        </div>
 
-                    <img className="w-50 rounded-xl" src={image} alt={name} />
+        <div className="flex justify-center pb-10">
+          <p className="font-bold text-blue-50">{category}</p>
+        </div>
 
-                </div>
+        <div className="flex-col 1 pb-5">
+          <p className="font-bold text-blue-50">Instructions: </p>
+          <p className="text-blue-50">{instructions}</p>
+        </div>
 
-                <div className="">
-                    <p>{category}</p>
-                </div>
+        <div className="flex-col 1 pb-5">
+          <p className="font-bold text-blue-50">Ingredients:</p>
+          <ul>
+            {ingredients.map((ingredient, i) => (
+              <li key={`${i}-${ingredient}`} className="text-blue-50"
+              >{ingredient}</li>
+            ))}
+          </ul>
+        </div>
 
-                <div className="flex justify-start">
-                    <p className="">{instructions}</p>
-                </div>
+        <div className="flex-col 1 ">
+          <p className="font-bold text-blue-50">Measures:</p>
+          <ul>
+            {measures.map((measure, i) => (
+              <li key={`${i}-${measure}`} className="text-blue-50">{measure}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
 
-                <div className="flex: col-end-1">
-                    <ul>
-                        {ingredients.map((ingredient) => (
-                            <li>{ingredient}</li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div className="">
-                    <ul>
-                        {measures.map((measure) => (
-                            <li>{measure}</li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-
-            </div>
-    )
+    </div>
+  )
 }
 
 export default CardInfo
