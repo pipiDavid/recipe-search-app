@@ -6,16 +6,10 @@ import { ApiResponse } from "../types/recipe"
 import { mapMeals } from "../utils/mapAttribute"
 
 export function UseFetchRecipes() {
-  const { recipes, setRecipes, query, setLoading, setError } = useRecipeContext()
+  const { setRecipes, query, setLoading, setError } = useRecipeContext()
   const API_URL = 'https://www.themealdb.com/api/json/v1/1/'
 
   useEffect(() => {
-    if (!query.trim()) {
-      setLoading(false)
-      setError(null)
-
-      return
-    }
     const fetchData = async () => {
       try {
         setLoading(true)

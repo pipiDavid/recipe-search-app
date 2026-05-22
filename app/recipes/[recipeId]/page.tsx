@@ -1,25 +1,19 @@
 'use client'
-import { useRouter } from "next/navigation"
-import { useRecipeContext } from "../../context/RecipeContext"
+import { useParams } from "next/navigation"
 import CardInfo from "../../components/cardInfo"
+import { getRecipeById } from "@/app/utils/getRecipeById"
+
 
 function RecipeId() {
-    const router = useRouter()
-    const pageContext = useRecipeContext()
-    console.log('pageContext:' + pageContext) // 
-    return (<></>)
- 
-    if(!selectedRecipe) {
-        return <p>Error</p>
-    }
-    return (
-        <div>
-            <CardInfo
-            recipes={selectedRecipe}/>
-        </div>
-        
-    )
-    
+  const {recipeId} = useParams()
+  const recipe = getRecipeById(recipeId as string)
+
+  return (
+    <>
+      {recipe ? <CardInfo recipes={recipe} /> : <p>Recipe not found</p>}
+    </>
+  )
+
 }
 
 export default RecipeId
