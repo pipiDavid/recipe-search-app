@@ -12,8 +12,8 @@ export function App() {
   UseFetchRecipes()
 
   return (
-    
-      <HomePage/>
-    
+
+    <HomePage />
+
   )
 }

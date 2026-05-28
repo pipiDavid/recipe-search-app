@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useRecipeContext } from "../context/RecipeContext"
 import { ApiResponse } from "../types/recipe"
 import { mapMeals } from "../utils/mapAttribute"
