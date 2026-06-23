@@ -10,7 +10,7 @@ type CardProps = {
 function Card({ recipes, clickRecipe, addToFavorites, isFavorite }: CardProps) {
   return (
     <div
-      className="group relative rounded-2xl overflow-hidden bg-[#1c1c1c] border border-[#2a2a2a] hover:border-[#c9402b] transition-all duration-300 cursor-pointer"
+      className="group relative rounded-2xl overflow-hidden bg-white border border-[#e8e0d4] hover:border-[#f97316] hover:scale-[1.04] hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#f97316]/20 transition-all duration-300 cursor-pointer"
       onClick={() => clickRecipe(recipes.id)}
     >
       <div className="relative aspect-square overflow-hidden">
@@ -19,15 +19,15 @@ function Card({ recipes, clickRecipe, addToFavorites, isFavorite }: CardProps) {
           src={recipes.image}
           alt={recipes.name}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
-      <div className="p-4 flex items-center justify-between">
-        <p className="text-[#f5f5f0] font-medium text-sm truncate flex-1">
+      <div className="p-4 flex items-center justify-between bg-white">
+        <p className="text-[#1a1208] font-medium text-sm truncate flex-1">
           {recipes.name}
         </p>
         <button
-          className="ml-3 flex-shrink-0 transition-transform duration-200 hover:scale-125"
+          className="ml-3 shrink-0 transition-transform duration-200 hover:scale-125"
           onClick={(e) => {
             e.stopPropagation()
             addToFavorites(recipes.id)
@@ -35,9 +35,9 @@ function Card({ recipes, clickRecipe, addToFavorites, isFavorite }: CardProps) {
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           {isFavorite ? (
-            <span className="text-[#c9402b] text-lg">♥</span>
+            <span className="text-[#e53e5a] text-lg">♥</span>
           ) : (
-            <span className="text-[#5a5a5a] hover:text-[#c9402b] text-lg transition-colors duration-200">♡</span>
+            <span className="text-[#c5b8aa] hover:text-[#e53e5a] text-lg transition-colors duration-200">♡</span>
           )}
         </button>
       </div>
