@@ -20,6 +20,7 @@ export default function FavoritesRecipes() {
           }}
           addToFavorites={getFavorites}
           isFavorite={true}
+
         />
       ))}
     </div>
