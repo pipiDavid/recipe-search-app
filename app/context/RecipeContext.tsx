@@ -7,6 +7,9 @@ type RecipeContextTypes = {   // esto va a ser los valores que va tener RecipeCo
 	query: string
 	setQuery: (inputQuery: string) => void
 
+	category: string
+    setCategory: (inputCategory: string) => void
+
 	error: Error | null
 	setError: (inputError: Error | null) => void
 
@@ -29,6 +32,7 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
 	const [recipes, setRecipes] = useState<Recipe[]>([])
 	const [error, setError] = useState<Error | null>(null)
 	const [query, setQuery] = useState('')
+	const [category, setCategory] = useState('')
 	const [loading, setLoading] = useState<boolean>(false)
 	const [favoritesId, setFavoritesId] = useState<string[]>([])
 	const [categories, setCategories] = useState<Category[]>([])
@@ -42,6 +46,8 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
 				setError,
 				query,
 				setQuery,
+				category,
+				setCategory,
 				loading,
 				setLoading,
 				favoritesId,

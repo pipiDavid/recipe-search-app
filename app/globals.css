@@ -1,1 +1,225 @@
 @import "tailwindcss";
+
+/* =============================================
+   KEYFRAMES
+   ============================================= */
+
+/* Loading */
+@keyframes skeleton-wave {
+  0%   { background-position: -400% 0; }
+  100% { background-position:  400% 0; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes orbit-a {
+  from { transform: rotate(0deg)   translateX(17px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(17px) rotate(-360deg); }
+}
+@keyframes orbit-b {
+  from { transform: rotate(120deg)  translateX(17px) rotate(-120deg); }
+  to   { transform: rotate(480deg)  translateX(17px) rotate(-480deg); }
+}
+@keyframes orbit-c {
+  from { transform: rotate(240deg)  translateX(17px) rotate(-240deg); }
+  to   { transform: rotate(600deg)  translateX(17px) rotate(-600deg); }
+}
+
+/* Card entrance */
+@keyframes card-rise {
+  0%  { opacity: 0; transform: translateY(52px) scale(0.90); filter: blur(8px); }
+  55% { filter: blur(0); }
+  100%{ opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0); }
+}
+
+/* Directional enters */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(38px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-from-left {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slide-from-right {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes ingredient-in {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Toast */
+@keyframes toast-bounce-in {
+  0%  { opacity: 0; transform: scale(0.2) translateY(45px); filter: blur(8px); }
+  55% { opacity: 1; filter: blur(0);       transform: scale(1.1) translateY(-7px); }
+  75% {             transform: scale(0.96) translateY(2px); }
+  100%{ opacity: 1; transform: scale(1)   translateY(0); }
+}
+@keyframes toast-bounce-out {
+  0%  { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  30% {             transform: scale(1.05) translateY(-5px); }
+  100%{ opacity: 0; transform: scale(0.25) translateY(22px); filter: blur(10px); }
+}
+
+/* Heart particles */
+@keyframes float-heart {
+  0%   { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.15) rotate(var(--rot)); }
+}
+
+/* Header logo letter drop */
+@keyframes letter-fall {
+  0%  { opacity: 0; transform: translateY(-24px) rotate(-7deg); }
+  60% {             transform: translateY(4px)   rotate(1.5deg); }
+  100%{ opacity: 1; transform: translateY(0)     rotate(0deg); }
+}
+
+/* Search glow pulse */
+@keyframes search-glow {
+  0%, 100% { box-shadow: 0 0 0 2.5px rgba(249,115,22,0.35), 0 4px 20px rgba(249,115,22,0.1); }
+  50%       { box-shadow: 0 0 0 3.5px rgba(249,115,22,0.55), 0 4px 28px rgba(249,115,22,0.18); }
+}
+
+/* Modal entrance */
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.93) translateY(20px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* Page number 3-D flip */
+@keyframes page-num-in {
+  from { opacity: 0; transform: perspective(280px) rotateX(-80deg) translateY(10px); }
+  to   { opacity: 1; transform: perspective(280px) rotateX(0)       translateY(0); }
+}
+
+/* Favorites button heart throb */
+@keyframes heart-throb {
+  0%, 100%{ transform: scale(1); }
+  20%     { transform: scale(1.4); }
+  40%     { transform: scale(1.1); }
+  60%     { transform: scale(1.25); }
+  80%     { transform: scale(1.05); }
+}
+
+/* Legacy (toast fallback) */
+@keyframes pop-in {
+  0%  { opacity: 0; transform: scale(0.5); }
+  65% { opacity: 1; transform: scale(1.08); }
+  100%{ opacity: 1; transform: scale(1); }
+}
+@keyframes pop-out {
+  0%  { opacity: 1; transform: scale(1); }
+  100%{ opacity: 0; transform: scale(0.75); }
+}
+@keyframes heart-pulse {
+  0%, 100%{ transform: scale(1); }
+  30%     { transform: scale(1.55); }
+  60%     { transform: scale(1.15); }
+}
+
+/* =============================================
+   UTILITY CLASSES
+   ============================================= */
+
+.skeleton {
+  background: linear-gradient(
+    108deg,
+    #ede8df 25%,
+    #f6f1ea 42%,
+    #ede8df 60%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-wave 2.2s ease-in-out infinite;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e8e0d4;
+  border-top-color: #f97316;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Orbiting 3-dot loader */
+.orbit-loader {
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+.orbit-loader span {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin: -5px 0 0 -5px;
+}
+.orbit-loader span:nth-child(1) { background: #f97316; animation: orbit-a 1.1s cubic-bezier(0.5,0,0.5,1) infinite; }
+.orbit-loader span:nth-child(2) { background: #fb923c; animation: orbit-b 1.1s cubic-bezier(0.5,0,0.5,1) infinite; opacity: 0.75; }
+.orbit-loader span:nth-child(3) { background: #d97706; animation: orbit-c 1.1s cubic-bezier(0.5,0,0.5,1) infinite; opacity: 0.5; }
+
+/* Card stagger entrance */
+.card-animate {
+  opacity: 0;
+  animation: card-rise 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Directional animations */
+.animate-slide-up    { animation: slide-up         0.7s  cubic-bezier(0.16,1,0.3,1) both; }
+.animate-slide-left  { animation: slide-from-left  0.75s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-slide-right { animation: slide-from-right 0.75s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* Toast animations */
+.toast-enter { animation: toast-bounce-in  0.55s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.toast-exit  { animation: toast-bounce-out 0.42s cubic-bezier(0.55,0,1,0.45)   forwards; }
+.heart-pulse { animation: heart-pulse 0.75s ease-in-out; }
+
+/* Floating heart particles */
+.heart-particle {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float-heart 0.9s cubic-bezier(0.165,0.84,0.44,1) forwards;
+  animation-delay: var(--delay, 0s);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* Header heart */
+.animate-heart-throb {
+  display: inline-block;
+  animation: heart-throb 2.4s ease-in-out infinite;
+}
+
+/* Pagination 3-D entrance */
+.page-num-enter {
+  animation: page-num-in 0.38s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+/* Modal panel */
+.modal-animate { animation: modal-in 0.32s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* Glowing search input when focused */
+.search-focused {
+  animation: search-glow 2s ease-in-out infinite;
+  border-color: #f97316 !important;
+  background: #ffffff !important;
+}
+
+@layer base {
+  body {
+    background-color: #faf8f4;
+    color: #1a1208;
+  }
+  select option {
+    background-color: #ffffff;
+    color: #1a1208;
+  }
+}
