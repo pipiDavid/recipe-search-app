@@ -2,12 +2,13 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useRecipeContext } from "../context/RecipeContext"
+import CategoryDropdown from "./CategoryDropdown"
 
 const WORD1 = "My "
 const WORD2 = "Meals"
 
 export default function Header() {
-  const { categories, query, setQuery, category, setCategory } = useRecipeContext()
+  const { query, setQuery } = useRecipeContext()
   const router = useRouter()
   const [searchFocused, setSearchFocused] = useState(false)
 
@@ -58,16 +59,7 @@ export default function Header() {
               searchFocused ? "search-focused" : "bg-[#faf8f4] border-[#e8e0d4]"
             }`}
           />
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="bg-[#faf8f4] border border-[#e8e0d4] text-[#1a1208] rounded-full px-5 py-2.5 text-sm outline-none focus:border-[#f97316] focus:bg-white transition-all duration-200 cursor-pointer"
-          >
-            <option value="">All categories</option>
-            {categories.map((cat) => (
-              <option key={cat.name} value={cat.name}>{cat.name}</option>
-            ))}
-          </select>
+          <CategoryDropdown />
         </div>
 
       </div>
