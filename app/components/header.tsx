@@ -1,15 +1,17 @@
 'use client'
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 import { useRecipeContext } from "../context/RecipeContext"
 import CategoryDropdown from "./CategoryDropdown"
-import { FiSearch } from "react-icons/fi"
+import { FiSearch, FiHome } from "react-icons/fi"
 
 const TITLE = "ForkFlow"
 
 export default function Header() {
   const { query, setQuery } = useRecipeContext()
   const router = useRouter()
+  const pathname = usePathname()
+  const isHome = pathname === '/'
   const [searchFocused, setSearchFocused] = useState(false)
   const [searchHovered, setSearchHovered] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -64,10 +66,10 @@ export default function Header() {
           {/* Mini logo — slides in when scrolled */}
           <div
             className="overflow-hidden transition-all duration-500 whitespace-nowrap shrink-0"
-            style={{ maxWidth: scrolled ? '76px' : '0', opacity: scrolled ? 1 : 0 }}
+            style={{ maxWidth: scrolled ? '160px' : '0', opacity: scrolled ? 1 : 0 }}
             aria-hidden="true"
           >
-            <span className="text-sm font-bold tracking-widest uppercase">
+            <span className="text-sm font-bold tracking-widest uppercase pr-1">
               <span className="text-[#1a1208]">Fork</span>
               <span className="text-[#f97316]">Flow</span>
             </span>
@@ -101,6 +103,16 @@ export default function Header() {
           </div>
 
           <CategoryDropdown />
+
+          {!isHome && (
+            <button
+              onClick={() => router.push("/")}
+              className="flex items-center gap-2 text-sm text-[#78685a] hover:text-[#f97316] border border-[#e8e0d4] hover:border-[#f97316] bg-white px-4 py-2 rounded-full transition-all duration-200 hover:shadow-md hover:shadow-[#f97316]/10 group whitespace-nowrap shrink-0"
+            >
+              <FiHome size={14} className="text-[#78685a] group-hover:text-[#f97316] transition-colors duration-200" />
+              <span className="group-hover:tracking-wide transition-all duration-200">Home</span>
+            </button>
+          )}
 
           <button
             onClick={() => router.push("/favorites")}
