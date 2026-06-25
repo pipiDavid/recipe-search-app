@@ -52,16 +52,28 @@ function Card({ recipes, clickRecipe, addToFavorites, isFavorite, index = 0, isC
     setTimeout(() => setParticles([]), 1100)
   }
 
+  const glass = {
+    background: "linear-gradient(135deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.14) 100%)",
+    backdropFilter: "blur(12px) saturate(160%)",
+    WebkitBackdropFilter: "blur(12px) saturate(160%)",
+    border: "1px solid rgba(255,255,255,0.45)",
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 8px rgba(0,0,0,0.1)",
+  }
+
   return (
     <div
       ref={cardRef}
-      className="card-animate group relative rounded-2xl bg-white cursor-pointer"
+      className="card-animate group relative rounded-2xl cursor-pointer"
       style={{
         animationDelay: `${index * 0.07}s`,
         transition: "transform 0.12s ease, box-shadow 0.3s ease",
+        background: "linear-gradient(135deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.18) 100%)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+        border: "1px solid rgba(255,255,255,0.5)",
         boxShadow: isHovered
-          ? "0 0 0 1.5px #f97316, 0 24px 52px rgba(249,115,22,0.17), 0 8px 24px rgba(0,0,0,0.08)"
-          : "0 0 0 1px #e8e0d4, 0 1px 4px rgba(0,0,0,0.04)",
+          ? "0 0 0 1.5px #f97316, 0 24px 52px rgba(249,115,22,0.17), 0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.8)"
+          : "0 4px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8)",
         willChange: "transform",
       }}
       onClick={() => clickRecipe(recipes.id)}
@@ -104,45 +116,46 @@ function Card({ recipes, clickRecipe, addToFavorites, isFavorite, index = 0, isC
           </button>
         )}
 
-        <div
-          className="absolute bottom-2.5 left-2.5 translate-y-3 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-          style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }}
-        >
-          <span className="bg-white/95 backdrop-blur-sm text-[10px] font-bold tracking-[0.14em] uppercase text-[#d97706] px-2.5 py-1 rounded-full shadow-sm">
-            {recipes.category}
-          </span>
+        <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center gap-2 z-20">
+          <p
+            className="flex-1 truncate text-white font-medium text-sm px-3 py-1.5 rounded-xl group-hover:text-[#fed7aa] transition-colors duration-300"
+            style={glass}
+          >
+            {recipes.name}
+          </p>
+          <div className="relative shrink-0">
+            {particles.map((p) => (
+              <span
+                key={p.id}
+                className="heart-particle text-[#e53e5a]"
+                style={{ "--dx": p.dx, "--dy": p.dy, "--rot": p.rot, "--delay": p.delay } as React.CSSProperties}
+              >
+                ♥
+              </span>
+            ))}
+            <button
+              className="relative z-10 w-9 h-9 flex items-center justify-center rounded-xl transition-transform duration-150 hover:scale-110 active:scale-90"
+              style={glass}
+              onClick={(e) => {
+                e.stopPropagation()
+                addToFavorites(recipes.id)
+                if (!isFavorite) spawnParticles()
+              }}
+              aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+            >
+              {isFavorite
+                ? <span className="text-[#ff6b8a] text-lg select-none leading-none">♥</span>
+                : <span className="text-white/80 hover:text-[#ff6b8a] text-lg transition-colors duration-200 select-none leading-none">♡</span>
+              }
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="p-4 flex items-center justify-between bg-white rounded-b-2xl relative z-10">
-        <p className="text-[#1a1208] font-medium text-sm truncate flex-1 group-hover:text-[#f97316] transition-colors duration-300">
-          {recipes.name}
-        </p>
-        <div className="relative ml-3 shrink-0">
-          {particles.map((p) => (
-            <span
-              key={p.id}
-              className="heart-particle text-[#e53e5a]"
-              style={{ "--dx": p.dx, "--dy": p.dy, "--rot": p.rot, "--delay": p.delay } as React.CSSProperties}
-            >
-              ♥
-            </span>
-          ))}
-          <button
-            className="relative z-10 transition-transform duration-150 hover:scale-125 active:scale-90"
-            onClick={(e) => {
-              e.stopPropagation()
-              addToFavorites(recipes.id)
-              if (!isFavorite) spawnParticles()
-            }}
-            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-          >
-            {isFavorite
-              ? <span className="text-[#e53e5a] text-xl select-none">♥</span>
-              : <span className="text-[#c5b8aa] hover:text-[#e53e5a] text-xl transition-colors duration-200 select-none">♡</span>
-            }
-          </button>
-        </div>
+      <div className="px-3.5 py-2.5">
+        <span className="text-[10px] font-bold tracking-[0.14em] uppercase text-[#d97706]">
+          {recipes.category}
+        </span>
       </div>
     </div>
   )
