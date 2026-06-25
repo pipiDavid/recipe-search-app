@@ -12,6 +12,8 @@ export function UseFetchRecipes() {
   const API_URL = 'https://www.themealdb.com/api/json/v1/1/'
 
   useEffect(() => {
+    const controller = new AbortController()
+
     const fetchData = async () => {
       try {
         setLoading(true)
@@ -25,23 +27,27 @@ export function UseFetchRecipes() {
           endpoint = `${API_URL}filter.php?c=${category}`
         } else {
           endpoint = `${API_URL}search.php?s=`
-        } 
-        const response = await fetch(endpoint)
-        
-        
+        }
+        const response = await fetch(endpoint, { signal: controller.signal })
 
         if (!response.ok) {
-          throw new Error('No se encontraron Recetas') //CAMBIAR EL ERROR Y SER MAS EXPLICITO
+          throw new Error('No se encontraron Recetas')
         }
         const data: ApiResponse = await response.json()
         const mappedRecipe = mapMeals(data)
         setRecipes(mappedRecipe)
       } catch (error) {
-        setError(error as Error)
+        if ((error as Error).name !== 'AbortError') {
+          setError(error as Error)
+        }
       } finally {
-        setLoading(false)
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
       }
     }
+
     fetchData()
+    return () => controller.abort()
   }, [query, category])
 }

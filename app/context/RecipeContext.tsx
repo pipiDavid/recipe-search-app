@@ -63,10 +63,8 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
 
 export function useRecipeContext() {
 	const context = useContext(RecipeContext)
-	console.log('context: ' + context)
 	if (!context) {
 		throw new Error('Error con el useRecipeContext')
 	}
-
 	return context
 }
