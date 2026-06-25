@@ -1,5 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { useRecipeContext } from "../context/RecipeContext"
 import {
   GiMeat, GiChickenLeg, GiCakeSlice,
@@ -33,6 +34,8 @@ function getIcon(name: string) {
 
 export default function CategoryDropdown() {
   const { categories, category, setCategory } = useRecipeContext()
+  const router = useRouter()
+  const isHome = usePathname() === '/'
   const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState<string | null>(null)
   const ref = useRef<HTMLDivElement>(null)
@@ -91,7 +94,7 @@ export default function CategoryDropdown() {
             return (
               <button
                 key={opt.name || "__all__"}
-                onClick={() => { setCategory(opt.name); setOpen(false) }}
+                onClick={() => { setCategory(opt.name); setOpen(false); if (!isHome) router.push('/') }}
                 onMouseEnter={() => setHovered(opt.name || "__all__")}
                 onMouseLeave={() => setHovered(null)}
                 className={`

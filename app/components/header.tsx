@@ -95,7 +95,10 @@ export default function Header() {
               type="text"
               placeholder="Find your next meal..."
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value)
+                if (!isHome) router.push('/')
+              }}
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
               className="flex-1 min-w-0 bg-transparent outline-none text-[#1a1208] placeholder-[#b5a898] text-sm py-2 pl-2 pr-4"
