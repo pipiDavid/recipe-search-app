@@ -25,7 +25,7 @@ export default function Header() {
   const searchExpanded = searchFocused || searchHovered
 
   return (
-    <header className="sticky top-0 z-50 bg-white/96 backdrop-blur-sm border-b border-[#e8e0d4] shadow-sm">
+    <header className="max-w-full sticky top-0 z-50 bg-white/96 backdrop-blur-sm border-b border-[#e8e0d4] shadow-sm">
       <div className={`max-w-7xl mx-auto px-6 transition-all duration-500 ${scrolled ? 'py-2' : 'py-4'}`}>
 
         {/* Hero title — collapses on scroll */}
@@ -61,7 +61,7 @@ export default function Header() {
         </div>
 
         {/* Controls row */}
-        <div className="flex items-center justify-center gap-3">
+        <div className="max-w-full flex-wrap flex items-center justify-center gap-3">
 
           {/* Mini logo — slides in when scrolled */}
           <div
